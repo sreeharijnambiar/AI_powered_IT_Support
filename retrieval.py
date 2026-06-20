@@ -21,9 +21,33 @@ def process_query(user_query):
         )
 
         if result["ids"]:
+
+            metadata = result["metadatas"][0]
+            document = result["documents"][0]
+
+            ticket_details = f"""
+            Ticket ID: {metadata['ticket_id']}
+
+            Category: {metadata['category']}
+
+            Priority: {metadata['priority']}
+
+            Assigned Team: {metadata['assigned_team']}
+
+            Issue Details:
+            {document}
+            """
+
             return {
                 "status": "TICKET_FOUND",
-                "response": result
+                "response": ticket_details
+            }
+
+        else:
+
+            return {
+                "status": "TICKET_NOT_FOUND",
+                "response": f"Ticket {user_query.upper()} not found."
             }
 
     query_embedding = model.encode(user_query).tolist()

@@ -17,14 +17,19 @@ if "show_ticket_form" not in st.session_state:
 if "user_query" not in st.session_state:
     st.session_state.user_query = ""
 
-query = st.chat_input("Describe your IT issue...")
+query = st.chat_input("Describe your IT issue... or if ticket ID start with INC-")
 
 if query:
     st.chat_message("user").write(query)
 
     result = process_query(query)
+    if result["status"] == "TICKET_FOUND":
 
-    if result["status"] == "FOUND":
+        st.write(result["response"])
+
+        st.session_state.show_ticket_form = False
+    
+    elif result["status"] == "FOUND":
         st.chat_message("assistant").write(result["response"])
         st.session_state.show_ticket_form = False
     else:
