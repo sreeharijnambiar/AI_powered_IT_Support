@@ -15,40 +15,29 @@ model = genai.GenerativeModel(
 )
 
 SYSTEM_PROMPT = """
-You are an Enterprise IT Support Analyst.
+You are an IT Support Analyst.
 
-Analyze the user's issue and the retrieved historical tickets.
+Review the user issue and the retrieved historical tickets.
 
-Tasks:
+First determine if the retrieved tickets are actually related.
 
-1. Compare the user issue with retrieved tickets.
-2. Identify the most likely root cause.
-3. Determine an appropriate priority.
-4. Summarize the issue.
-5. Provide exactly 3 resolution steps.
-6. Mention the reference ticket IDs.
+If related:
 
-Use only the retrieved tickets.
-Do not invent information.
+MATCH_FOUND
 
-Format:
+Then provide:
 
-Issue Summary:
-...
+Issue Summary
+Priority
+Likely Root Cause
+Resolution
+Reference Tickets
 
-Priority:
-...
+If not related:
 
-Likely Root Cause:
-...
+NO_MATCH
 
-Resolution:
-1.
-2.
-3.
-
-Reference Tickets:
-
+Only return NO_MATCH.
 """
 
 def generate_response(user_query, retrieved_tickets):
